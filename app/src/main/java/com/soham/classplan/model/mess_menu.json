@@ -67,19 +67,19 @@
   "wednesday": {
     "breakfast": [
       "Veg Chowmein",
-      "Egg Bhujia Onion",
+      "Egg Chowmein",
       "Tomato Sauce",
-      "Cornflakes",
-      "Milk",
-      "Coffee"
+      "Chilli Sauce",
+      "Tea"
     ],
     "lunch": [
-      "Basmati Rice",
-      "Parher",
-      "Salad",
-      "Rajma",
-      "Mix Dal",
+      "Rice",
       "Roti",
+      "Dal",
+      "Fish Besar",
+      "Matar Paneer",
+      "Salad",
+      "Sriram Papad",
       "Mix Boiled Veg"
     ],
     "snacks": [
@@ -113,12 +113,11 @@
       "Roti",
       "Dal",
       "Rajma Masala",
-      "Mix Bhaji",
-      "Salad",
+      "Mix Bhaji/ Dahi Salad",
       "Mix Boiled Veg"
     ],
     "snacks": [
-      "Papdi Chaat",
+      "Papmudi Chaat",
       "Chutney",
       "Tea"
     ],
@@ -169,7 +168,7 @@
     "breakfast": [
       "Poha with Matar",
       "Sev Bhujia Onion",
-      "Groundnut",
+      "Ghugni",
       "Lemon",
       "Cornflakes",
       "Milk",
@@ -180,9 +179,9 @@
       "Rice",
       "Roti",
       "Dalma",
-      "Chicken Masala",
+      "Veg Manchurian",
       "Aloo Chokha",
-      "Sriram Pao",
+      "Sriram Papad",
       "Mix Khichdi"
     ],
     "snacks": [
@@ -214,14 +213,12 @@
       "Rice",
       "Dal",
       "Egg Masala",
-      "Aloo Besan",
-      "Soyabin Masala",
+      "Aloo Besan/ Soyabin Masala",
       "Mix Boiled Veg",
-      "Aachar",
-      "Salad"
+      "Aloo Chips/ Dahi Salad"
     ],
     "snacks": [
-      "Bread Pakoda",
+      "Pasta",
       "Tea"
     ],
     "dinner": [

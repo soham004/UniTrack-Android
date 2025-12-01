@@ -1,5 +1,6 @@
 package com.soham.classplan.mess
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.soham.classplan.model.MessMenuDay
@@ -33,6 +35,20 @@ fun MessMenuScreen(
     selectedIndex: Int,
     onDaySelected: (Int) -> Unit
 ) {
+    // Prevent crash when days is empty
+    if (days.isEmpty()) {
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Loading mess menu…")
+        }
+        return
+    }
+
+    // Prevent index crash if selectedIndex > days.size
+    val safeIndex = selectedIndex.coerceIn(0, days.lastIndex)
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -43,15 +59,16 @@ fun MessMenuScreen(
         Spacer(Modifier.height(50.dp))
         WeekdaySelector(
             items = days,
-            selectedIndex = selectedIndex,
+            selectedIndex = safeIndex,
             onDaySelected = onDaySelected,
             label = { it.label },
             icon = { it.icon }
         )
         Spacer(Modifier.height(45.dp))
-        MessMealsList(day = days[selectedIndex])
+        MessMealsList(day = days[safeIndex])
     }
 }
+
 
 @Composable
 private fun MessMealsList(day: MessMenuDay) {

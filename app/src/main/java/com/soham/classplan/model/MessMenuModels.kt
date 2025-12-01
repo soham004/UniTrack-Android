@@ -20,7 +20,7 @@ data class MessMenuDay(
     val meals: List<MealSlot>
 )
 
-object MessMenuRepository {
+object MessMenuRepository_ {
     val week: List<MessMenuDay> by lazy {
         listOf(
             MessMenuDay(
