@@ -3,7 +3,7 @@ package com.soham.classplan.model.remote
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object MessMenuApiClient {
+object ApiClient {
 
     private const val BASE_URL = "https://api.github.com/"
 

@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.soham.classplan.model.local.loadMessMenuJson
 import com.soham.classplan.model.local.saveMessMenuJson
 import com.soham.classplan.model.mapper.toDomain
-import com.soham.classplan.model.remote.MessMenuApiClient
+import com.soham.classplan.model.remote.ApiClient
 import com.soham.classplan.model.remote.GitHubFileResponse
 import com.soham.classplan.model.remote.MessMenuDTO
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +27,7 @@ class MessMenuRepository(private val context: Context) {
         try {
             // Fetch GitHub API file (Base64 encoded)
             val response: GitHubFileResponse =
-                MessMenuApiClient.api.getMessMenuFile()
+                ApiClient.api.getMessMenuFile()
 
             // Decode Base64 → String JSON
             val decodedJson = String(
