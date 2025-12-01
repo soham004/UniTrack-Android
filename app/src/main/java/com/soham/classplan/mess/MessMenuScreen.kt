@@ -1,5 +1,7 @@
 package com.soham.classplan.mess
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,45 +29,58 @@ import com.soham.classplan.shared.WeekdaySelector
 import com.soham.classplan.shared.fullDayName
 import com.soham.classplan.ui.theme.TextPrimary
 import com.soham.classplan.ui.theme.TextSecondary
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun MessMenuScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     days: List<MessMenuDay>,
     selectedIndex: Int,
-    onDaySelected: (Int) -> Unit
-) {
-    // Prevent crash when days is empty
-    if (days.isEmpty()) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Loading mess menu…")
-        }
-        return
-    }
+    onDaySelected: (Int) -> Unit,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit
+){
+    val swipeState = rememberSwipeRefreshState(isRefreshing)
 
-    // Prevent index crash if selectedIndex > days.size
-    val safeIndex = selectedIndex.coerceIn(0, days.lastIndex)
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
+    SwipeRefresh(
+        state = swipeState,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
     ) {
-        Spacer(Modifier.height(50.dp))
-        HeaderSection(title = "Mess Menu")
-        Spacer(Modifier.height(50.dp))
-        WeekdaySelector(
-            items = days,
-            selectedIndex = safeIndex,
-            onDaySelected = onDaySelected,
-            label = { it.label },
-            icon = { it.icon }
-        )
-        Spacer(Modifier.height(45.dp))
-        MessMealsList(day = days[safeIndex])
+
+        // Prevent crash
+        if (days.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Loading mess menu…")
+            }
+            return@SwipeRefresh
+        }
+
+        val safeIndex = selectedIndex.coerceIn(0, days.lastIndex)
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp)
+        ) {
+            Spacer(Modifier.height(50.dp))
+            HeaderSection(title = "Mess Menu")
+            Spacer(Modifier.height(50.dp))
+            WeekdaySelector(
+                items = days,
+                selectedIndex = safeIndex,
+                onDaySelected = onDaySelected,
+                label = { it.label },
+                icon = { it.icon }
+            )
+            Spacer(Modifier.height(45.dp))
+            MessMealsList(day = days[safeIndex])
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.soham.classplan.home
 
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,7 +39,7 @@ fun ClassPlanApp() {
         currentDayIndex(classDays.map { it.label })
     }
     var selectedClassDay by remember { mutableIntStateOf(defaultClassDay) }
-
+    val scope = rememberCoroutineScope()
     // ----------------------
     // MESS DAYS (Dynamic JSON)
     // ----------------------
@@ -61,7 +62,7 @@ fun ClassPlanApp() {
     var selectedMessDay by remember { mutableIntStateOf(defaultMessDay) }
 
     var currentTab by remember { mutableStateOf(HomeTab.Classes) }
-
+    var refreshing by remember { mutableStateOf(false) }
     Scaffold(
         bottomBar = { ClassPlanBottomBar(currentTab) { currentTab = it } },
         containerColor = MaterialTheme.colorScheme.background
@@ -79,25 +80,23 @@ fun ClassPlanApp() {
             }
 
             HomeTab.Mess -> {
-                if (messDays.isEmpty()) {
-                    // Loading UI
-                    Box(
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("Loading mess menu…")
+                MessMenuScreen(
+                    modifier = Modifier.padding(paddingValues),
+                    days = messDays,
+                    selectedIndex = selectedMessDay,
+                    onDaySelected = { selectedMessDay = it },
+                    isRefreshing = refreshing,
+                    onRefresh = {
+                        scope.launch {
+                            refreshing = true
+                            repo.refresh()
+                            refreshing = false
+                        }
                     }
-                } else {
-                    MessMenuScreen(
-                        modifier = Modifier.padding(paddingValues),
-                        days = messDays,
-                        selectedIndex = selectedMessDay,
-                        onDaySelected = { selectedMessDay = it }
-                    )
-                }
+
+                )
             }
+
         }
     }
 }

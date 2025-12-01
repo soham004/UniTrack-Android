@@ -62,5 +62,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     // Jetpack DataStore (Preferences)
     implementation("androidx.datastore:datastore-preferences:1.2.0")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.36.0")
+
 
 }
