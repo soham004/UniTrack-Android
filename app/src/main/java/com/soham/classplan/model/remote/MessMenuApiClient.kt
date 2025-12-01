@@ -5,8 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object MessMenuApiClient {
 
-    private const val BASE_URL =
-        "https://raw.githubusercontent.com/soham004/UniTrack-Android/refs/heads/master/app/src/main/java/com/soham/classplan/model/"
+    private const val BASE_URL = "https://api.github.com/"
 
     val api: MessMenuApi by lazy {
         Retrofit.Builder()
