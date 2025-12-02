@@ -1,7 +1,6 @@
 package com.soham.classplan.model.messmenu
 
 import android.content.Context
-import android.util.Base64
 import com.google.gson.Gson
 import com.soham.classplan.model.remote.ApiClient
 import com.soham.classplan.model.remote.messmenu.MessMenuDTO
@@ -18,7 +17,6 @@ class MessMenuRepository(private val context: Context) {
             else emptyList()
         }
 
-    // Fetch from GitHub API + decode Base64 + save to DataStore
     suspend fun refresh() {
         try {
             val dto = ApiClient.api.getMessMenuFile()

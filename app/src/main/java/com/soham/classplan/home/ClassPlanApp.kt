@@ -20,38 +20,43 @@ import androidx.compose.ui.unit.dp
 import com.soham.classplan.classes.ClassesScreen
 import com.soham.classplan.mess.MessMenuScreen
 import com.soham.classplan.model.messmenu.MessMenuRepository
-import com.soham.classplan.model.TimetableRepository
+import com.soham.classplan.model.timetable.TimetableRepository
 import com.soham.classplan.shared.currentDayIndex
+
 
 enum class HomeTab { Classes, Mess }
 
 @Composable
 fun ClassPlanApp() {
 
-    // ----------------------
-    // CLASS DAYS (unchanged)
-    // ----------------------
-    val classDays = TimetableRepository.sampleWeek
-    val defaultClassDay = remember(classDays) {
-        currentDayIndex(classDays.map { it.label })
-    }
-    var selectedClassDay by remember { mutableIntStateOf(defaultClassDay) }
     val scope = rememberCoroutineScope()
-    // ----------------------
-    // MESS DAYS (Dynamic JSON)
-    // ----------------------
     val context = LocalContext.current
-    val repo = remember { MessMenuRepository(context) }
-    val messDays by repo.messMenuFlow.collectAsState(emptyList())
 
-    // Try to load on startup
-    LaunchedEffect(Unit) {
-        repo.refresh()
+    // --------------------------
+    // TIMETABLE (Dynamic Loading)
+    // --------------------------
+    val classRepo = remember { TimetableRepository(context) }
+    val classDays by classRepo.timetableFlow.collectAsState(emptyList())
+
+    var selectedClassDay by remember { mutableIntStateOf(0) }
+    var timetableRefreshing by remember { mutableStateOf(false) }
+
+    // Auto-select today's class day when data loads
+    LaunchedEffect(classDays) {
+        if (classDays.isNotEmpty()) {
+            selectedClassDay = currentDayIndex(classDays.map { it.label })
+        }
     }
+
+    // MESS MENU (Dynamic Setup Stage)
+    val messRepo = remember { MessMenuRepository(context) }
+    val messDays by messRepo.messMenuFlow.collectAsState(emptyList())
 
     var selectedMessDay by remember { mutableIntStateOf(0) }
+    var messRefreshing by remember { mutableStateOf(false) }
 
-    // Auto-select today's mess day when data is loaded/refreshed
+
+    // Auto-select today's mess day when loaded
     LaunchedEffect(messDays) {
         if (messDays.isNotEmpty()) {
             selectedMessDay = currentDayIndex(messDays.map { it.label })
@@ -59,7 +64,7 @@ fun ClassPlanApp() {
     }
 
     var currentTab by remember { mutableStateOf(HomeTab.Classes) }
-    var refreshing by remember { mutableStateOf(false) }
+
     Scaffold(
         bottomBar = { ClassPlanBottomBar(currentTab) { currentTab = it } },
         containerColor = MaterialTheme.colorScheme.background
@@ -67,33 +72,43 @@ fun ClassPlanApp() {
 
         when (currentTab) {
 
+
+            // Classes Tab (Dynamic JSON)
+
             HomeTab.Classes -> {
                 ClassesScreen(
                     modifier = Modifier.padding(paddingValues),
                     days = classDays,
                     selectedIndex = selectedClassDay,
-                    onDaySelected = { selectedClassDay = it }
+                    onDaySelected = { selectedClassDay = it },
+                    isRefreshing = timetableRefreshing,
+                    onRefresh = {
+                        scope.launch {
+                            timetableRefreshing = true
+                            classRepo.refresh()
+                            timetableRefreshing = false
+                        }
+                    }
                 )
             }
 
+            // Mess Tab
             HomeTab.Mess -> {
                 MessMenuScreen(
                     modifier = Modifier.padding(paddingValues),
                     days = messDays,
                     selectedIndex = selectedMessDay,
                     onDaySelected = { selectedMessDay = it },
-                    isRefreshing = refreshing,
+                    isRefreshing = messRefreshing,
                     onRefresh = {
                         scope.launch {
-                            refreshing = true
-                            repo.refresh()
-                            refreshing = false
+                            messRefreshing = true
+                            messRepo.refresh()
+                            messRefreshing = false
                         }
                     }
-
                 )
             }
-
         }
     }
 }

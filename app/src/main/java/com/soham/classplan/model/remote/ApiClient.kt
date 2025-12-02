@@ -1,6 +1,7 @@
 package com.soham.classplan.model.remote
 
 import com.soham.classplan.model.remote.messmenu.MessMenuApi
+import com.soham.classplan.model.remote.timetable.TimetableApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -14,5 +15,13 @@ object ApiClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(MessMenuApi::class.java)
+    }
+
+    val timetableApi: TimetableApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(TimetableApi::class.java)
     }
 }

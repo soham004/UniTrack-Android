@@ -1,5 +1,13 @@
 package com.soham.classplan.classes
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material.ExperimentalMaterialApi
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,8 +33,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import com.soham.classplan.model.TimetableDay
-import com.soham.classplan.model.TimetableSlot
+import com.soham.classplan.model.timetable.TimetableDay
+import com.soham.classplan.model.timetable.TimetableSlot
 
 import com.soham.classplan.shared.HeaderSection
 import com.soham.classplan.shared.WeekdaySelector
@@ -36,30 +44,67 @@ import com.soham.classplan.shared.formatTime
 import com.soham.classplan.ui.theme.TextPrimary
 import com.soham.classplan.ui.theme.TextSecondary
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ClassesScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     days: List<TimetableDay>,
     selectedIndex: Int,
-    onDaySelected: (Int) -> Unit
+    onDaySelected: (Int) -> Unit,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit
 ) {
-    Column(
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh
+    )
+
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .pullRefresh(pullRefreshState)
     ) {
-        Spacer(Modifier.height(50.dp))
-        HeaderSection(title = "Time Table")
-        Spacer(Modifier.height(50.dp))
-        WeekdaySelector(
-            items = days,
-            selectedIndex = selectedIndex,
-            onDaySelected = onDaySelected,
-            label = { it.label },
-            icon = { it.icon }
+
+        if (days.isEmpty()) {
+            // Loading UI
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text("Loading timetable…")
+            }
+        } else {
+            val safeIndex = selectedIndex.coerceIn(0, days.lastIndex)
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 20.dp)
+            ) {
+                Spacer(Modifier.height(50.dp))
+                HeaderSection(title = "Time Table")
+                Spacer(Modifier.height(50.dp))
+
+                WeekdaySelector(
+                    items = days,
+                    selectedIndex = safeIndex,
+                    onDaySelected = onDaySelected,
+                    label = { it.label },
+                    icon = { it.icon }
+                )
+
+                Spacer(Modifier.height(45.dp))
+                DaySchedule(day = days[safeIndex])
+            }
+        }
+
+        // Refresh indicator shown at the top
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
         )
-        Spacer(Modifier.height(45.dp))
-        DaySchedule(day = days[selectedIndex])
     }
 }
 
