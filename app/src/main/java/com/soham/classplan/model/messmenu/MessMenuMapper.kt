@@ -1,4 +1,4 @@
-package com.soham.classplan.model.mapper
+package com.soham.classplan.model.messmenu
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cookie
@@ -7,10 +7,8 @@ import androidx.compose.material.icons.outlined.EggAlt
 import androidx.compose.material.icons.outlined.LocalCafe
 import androidx.compose.material.icons.outlined.LocalDining
 import androidx.compose.material.icons.outlined.LunchDining
-import com.soham.classplan.model.MealSlot
-import com.soham.classplan.model.MessMenuDay
-import com.soham.classplan.model.remote.DayMealsDTO
-import com.soham.classplan.model.remote.MessMenuDTO
+import com.soham.classplan.model.remote.messmenu.DayMealsDTO
+import com.soham.classplan.model.remote.messmenu.MessMenuDTO
 
 fun DayMealsDTO.toMeals(): List<MealSlot> =
     listOf(

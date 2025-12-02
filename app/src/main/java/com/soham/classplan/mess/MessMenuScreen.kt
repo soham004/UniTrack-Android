@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.soham.classplan.model.MessMenuDay
-import com.soham.classplan.model.MealSlot
+import com.soham.classplan.model.messmenu.MessMenuDay
+import com.soham.classplan.model.messmenu.MealSlot
 import com.soham.classplan.shared.HeaderSection
 import com.soham.classplan.shared.WeekdaySelector
 import com.soham.classplan.shared.fullDayName

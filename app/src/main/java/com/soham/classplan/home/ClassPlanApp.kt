@@ -1,9 +1,7 @@
 package com.soham.classplan.home
 
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Restaurant
@@ -15,14 +13,13 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.soham.classplan.classes.ClassesScreen
 import com.soham.classplan.mess.MessMenuScreen
-import com.soham.classplan.model.MessMenuRepository
+import com.soham.classplan.model.messmenu.MessMenuRepository
 import com.soham.classplan.model.TimetableRepository
 import com.soham.classplan.shared.currentDayIndex
 
@@ -52,14 +49,14 @@ fun ClassPlanApp() {
         repo.refresh()
     }
 
-    // Avoid crash when messDays is empty
-    val defaultMessDay = remember(messDays) {
-        if (messDays.isNotEmpty())
-            currentDayIndex(messDays.map { it.label })
-        else 0
-    }
+    var selectedMessDay by remember { mutableIntStateOf(0) }
 
-    var selectedMessDay by remember { mutableIntStateOf(defaultMessDay) }
+    // Auto-select today's mess day when data is loaded/refreshed
+    LaunchedEffect(messDays) {
+        if (messDays.isNotEmpty()) {
+            selectedMessDay = currentDayIndex(messDays.map { it.label })
+        }
+    }
 
     var currentTab by remember { mutableStateOf(HomeTab.Classes) }
     var refreshing by remember { mutableStateOf(false) }

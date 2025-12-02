@@ -1,4 +1,4 @@
-package com.soham.classplan.model.remote
+package com.soham.classplan.model.remote.messmenu
 
 data class DayMealsDTO(
     val breakfast: List<String>,

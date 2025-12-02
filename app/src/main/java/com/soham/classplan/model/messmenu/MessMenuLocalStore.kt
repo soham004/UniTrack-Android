@@ -1,4 +1,4 @@
-package com.soham.classplan.model.local
+package com.soham.classplan.model.messmenu
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
