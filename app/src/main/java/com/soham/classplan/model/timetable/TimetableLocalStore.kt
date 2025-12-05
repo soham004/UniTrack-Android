@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.soham.classplan.model.timetableDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 // Create a dedicated DataStore for timetable
-val Context.timetableDataStore by preferencesDataStore("timetable_cache")
 
 private val TIMETABLE_KEY = stringPreferencesKey("timetable_json")
 

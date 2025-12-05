@@ -6,7 +6,5 @@ import retrofit2.http.Query
 interface TimetableApi {
 
     @GET("time_table.json")
-    suspend fun getTimetable(
-        @Query("t") t: Long = System.currentTimeMillis()   // cache buster (doesn't do shit)
-    ): TimetableDTO
+    suspend fun getTimetable(): TimetableDTO
 }

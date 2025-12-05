@@ -36,8 +36,12 @@ fun ClassPlanApp() {
     // TIMETABLE (Dynamic Loading)
     // --------------------------
     val classRepo = remember { TimetableRepository(context) }
+
     val classDays by classRepo.timetableFlow.collectAsState(emptyList())
 
+    LaunchedEffect(Unit) {
+        classRepo.refresh()
+    }
     var selectedClassDay by remember { mutableIntStateOf(0) }
     var timetableRefreshing by remember { mutableStateOf(false) }
 
@@ -51,6 +55,9 @@ fun ClassPlanApp() {
     // MESS MENU (Dynamic Setup Stage)
     val messRepo = remember { MessMenuRepository(context) }
     val messDays by messRepo.messMenuFlow.collectAsState(emptyList())
+    LaunchedEffect(Unit) {
+        messRepo.refresh()
+    }
 
     var selectedMessDay by remember { mutableIntStateOf(0) }
     var messRefreshing by remember { mutableStateOf(false) }
@@ -62,6 +69,7 @@ fun ClassPlanApp() {
             selectedMessDay = currentDayIndex(messDays.map { it.label })
         }
     }
+
 
     var currentTab by remember { mutableStateOf(HomeTab.Classes) }
 

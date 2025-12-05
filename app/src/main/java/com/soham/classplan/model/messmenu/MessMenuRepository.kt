@@ -18,11 +18,13 @@ class MessMenuRepository(private val context: Context) {
         }
 
     suspend fun refresh() {
+        println("TIMETABLE FETCHING")
         try {
             val dto = ApiClient.api.getMessMenuFile()
             val json = Gson().toJson(dto)
 
             saveMessMenuJson(context, json)
+            println("MESS MENU FETCHED & SAVED")
         } catch (e: Exception) {
             println("ERROR FETCHING MESS MENU: ${e.message}")
             e.printStackTrace()
